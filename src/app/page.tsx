@@ -46,7 +46,7 @@ export default function Home() {
     <main className="min-h-screen p-4 flex flex-col items-center justify-between">
       <ScoreBoard />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 lg:grid-rows-4 gap-4 items-center mb-8 w-full bg-slate-100 p-4 rounded-lg">
+      <div className="grid grid-cols-1 gap-2 max-h-[360px] overflow-hidden items-center mb-4 w-full bg-slate-100 p-4 rounded-lg lg:max-h-none lg:overflow-auto lg:grid-cols-4 lg:grid-rows-4 lg:gap-4 ">
         {pendingTickets.map((ticket: Ticket) => (
           <TicketComponent
             key={ticket.id}
