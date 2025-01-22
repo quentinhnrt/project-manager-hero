@@ -55,7 +55,29 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+		keyframes: {
+			success: {
+				'0%': { transform: 'scale(1)', opacity: '1' },
+				'50%': { transform: 'scale(1.1)', opacity: '0.8', backgroundColor: 'rgb(34,197,94)' },
+				'100%': { transform: 'scale(0)', opacity: '0' }
+			},
+			error: {
+				'0%': { transform: 'scale(1)', opacity: '1' },
+				'50%': { transform: 'scale(1.1)', opacity: '0.8', backgroundColor: 'rgb(239,68,68)' },
+				'100%': { transform: 'scale(0)', opacity: '0' }
+			},
+			shake: {
+				'0%, 100%': { transform: 'translateX(0)' },
+				'25%': { transform: 'translateX(-5px)' },
+				'75%': { transform: 'translateX(5px)' }
+			}
+		},
+		animation: {
+			success: 'success 0.5s ease-out forwards',
+			error: 'error 0.5s ease-out forwards',
+			shake: 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both'
+		}
   	}
   },
   plugins: [require("tailwindcss-animate")],
