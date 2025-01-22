@@ -1,59 +1,34 @@
+'use client'
+
 import { create } from 'zustand'
-import { type Ticket, type ScoreState, type GameEvent } from '@/types/ticket'
-import { generateTicket } from '@/utils/ticketGenerator'
+import { type Ticket, type ScoreState, type GameEvent } from '../types/ticket'
+import { generateTicket } from '../utils/ticketGenerator'
 
 interface GameState {
-  // États
   isPlaying: boolean
   isPaused: boolean
   tickets: Ticket[]
   score: ScoreState
   gameEvents: GameEvent[]
-  difficulty: 'easy' | 'medium' | 'hard'
-  ticketGenerationInterval: number
+  maxTickets: number
+  ticketGenerationInterval: number | null // Ajout de cette ligne
 
-  // Actions de jeu
   startGame: () => void
   pauseGame: () => void
   resumeGame: () => void
   endGame: () => void
-  setDifficulty: (difficulty: 'easy' | 'medium' | 'hard') => void
-
-  // Actions de tickets
   addTicket: (ticket: Ticket) => void
   removeTicket: (ticketId: string) => void
-  clearTickets: () => void
-
-  // Actions de score
   updateScore: (points: number, isCorrect: boolean) => void
-  resetScore: () => void
-  addGameEvent: (event: GameEvent) => void
-}
-
-// Configuration par niveau de difficulté
-const difficultySettings = {
-  easy: {
-    interval: 8000, // 8 secondes entre les tickets
-    timeLimit: 30, // 30 secondes par ticket
-    maxTickets: 5, // Maximum 5 tickets à l'écran
-  },
-  medium: {
-    interval: 5000, // 5 secondes entre les tickets
-    timeLimit: 20, // 20 secondes par ticket
-    maxTickets: 8, // Maximum 8 tickets à l'écran
-  },
-  hard: {
-    interval: 3000, // 3 secondes entre les tickets
-    timeLimit: 15, // 15 secondes par ticket
-    maxTickets: 10, // Maximum 10 tickets à l'écran
-  },
+  setMaxTickets: (max: number) => void
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
-  // États initiaux
   isPlaying: false,
   isPaused: false,
   tickets: [],
+  maxTickets: 3,
+  ticketGenerationInterval: null, // Initialisation
   score: {
     currentScore: 0,
     streak: 0,
@@ -63,11 +38,13 @@ export const useGameStore = create<GameState>((set, get) => ({
     ratio: 0,
   },
   gameEvents: [],
-  difficulty: 'medium',
-  ticketGenerationInterval: difficultySettings.medium.interval,
 
-  // Actions de jeu
   startGame: () => {
+    // Nettoyage de l'intervalle précédent si existant
+    if (get().ticketGenerationInterval) {
+      clearInterval(get().ticketGenerationInterval)
+    }
+
     set({
       isPlaying: true,
       isPaused: false,
@@ -80,18 +57,13 @@ export const useGameStore = create<GameState>((set, get) => ({
         wrongAnswers: 0,
         ratio: 0,
       },
-      gameEvents: [],
     })
 
-    // Démarrer la génération de tickets
-    const difficulty = get().difficulty
-    const settings = difficultySettings[difficulty]
-
     const generateNewTicket = () => {
-      const { tickets, isPlaying, isPaused } = get()
+      const { tickets, isPlaying, isPaused, maxTickets } = get()
 
       if (!isPlaying || isPaused) return
-      if (tickets.length >= settings.maxTickets) return
+      if (tickets.length >= maxTickets) return
 
       const newTicket = generateTicket()
       get().addTicket(newTicket)
@@ -100,41 +72,52 @@ export const useGameStore = create<GameState>((set, get) => ({
     // Premier ticket
     generateNewTicket()
 
-    // Configurer l'intervalle
-    const intervalId = setInterval(generateNewTicket, settings.interval)
+    // Générer un nouveau ticket toutes les 5 secondes
+    const intervalId = window.setInterval(() => {
+      generateNewTicket()
+    }, 5000)
 
-    // Stocker l'ID de l'intervalle pour pouvoir l'arrêter plus tard
-    set({ ticketGenerationInterval: intervalId as unknown as number })
+    set({ ticketGenerationInterval: intervalId })
   },
 
   pauseGame: () => {
-    set({ isPaused: true })
-    clearInterval(get().ticketGenerationInterval)
+    const interval = get().ticketGenerationInterval
+    if (interval) {
+      clearInterval(interval)
+    }
+    set({
+      isPaused: true,
+      ticketGenerationInterval: null,
+    })
   },
 
   resumeGame: () => {
     set({ isPaused: false })
-    get().startGame() // Redémarre la génération de tickets
+    get().startGame()
   },
 
   endGame: () => {
-    set({ isPlaying: false })
-    clearInterval(get().ticketGenerationInterval)
-    get().clearTickets()
-  },
-
-  setDifficulty: (difficulty) => {
+    const interval = get().ticketGenerationInterval
+    if (interval) {
+      clearInterval(interval)
+    }
     set({
-      difficulty,
-      ticketGenerationInterval: difficultySettings[difficulty].interval,
+      isPlaying: false,
+      ticketGenerationInterval: null,
     })
   },
 
-  // Actions de tickets
+  setMaxTickets: (max: number) => {
+    set({ maxTickets: max })
+  },
+
   addTicket: (ticket) => {
-    set((state) => ({
-      tickets: [...state.tickets, ticket],
-    }))
+    set((state) => {
+      if (state.tickets.length >= state.maxTickets) {
+        return state
+      }
+      return { tickets: [...state.tickets, ticket] }
+    })
   },
 
   removeTicket: (ticketId) => {
@@ -143,11 +126,6 @@ export const useGameStore = create<GameState>((set, get) => ({
     }))
   },
 
-  clearTickets: () => {
-    set({ tickets: [] })
-  },
-
-  // Actions de score
   updateScore: (points, isCorrect) => {
     set((state) => {
       const newScore = { ...state.score }
@@ -155,8 +133,6 @@ export const useGameStore = create<GameState>((set, get) => ({
       if (isCorrect) {
         newScore.correctAnswers++
         newScore.streak++
-
-        // Augmentation du multiplicateur tous les 5 tickets
         if (newScore.streak % 5 === 0) {
           newScore.multiplier += 0.5
         }
@@ -166,45 +142,13 @@ export const useGameStore = create<GameState>((set, get) => ({
         newScore.multiplier = 1
       }
 
-      // Calcul du score avec multiplicateur
       const adjustedPoints = Math.round(points * newScore.multiplier)
       newScore.currentScore += adjustedPoints
 
-      // Calcul du ratio
       const total = newScore.correctAnswers + newScore.wrongAnswers
       newScore.ratio = total > 0 ? newScore.correctAnswers / total : 0
 
-      // Ajout de l'événement
-      const event: GameEvent = {
-        type: isCorrect ? 'success' : 'error',
-        message: `${isCorrect ? '+' : ''}${adjustedPoints} points (x${newScore.multiplier.toFixed(1)})`,
-        points: adjustedPoints,
-      }
-
-      return {
-        score: newScore,
-        gameEvents: [event, ...state.gameEvents].slice(0, 5), // Garde les 5 derniers événements
-      }
+      return { score: newScore }
     })
-  },
-
-  resetScore: () => {
-    set({
-      score: {
-        currentScore: 0,
-        streak: 0,
-        multiplier: 1,
-        correctAnswers: 0,
-        wrongAnswers: 0,
-        ratio: 0,
-      },
-      gameEvents: [],
-    })
-  },
-
-  addGameEvent: (event) => {
-    set((state) => ({
-      gameEvents: [event, ...state.gameEvents].slice(0, 5),
-    }))
   },
 }))

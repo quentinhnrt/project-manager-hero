@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   DndContext,
   DragOverlay,
@@ -16,10 +16,19 @@ import { type Ticket } from '@/types/ticket'
 import TicketComponent from './Ticket'
 import { DropZone } from './DropZone'
 import { useGameStore } from '@/stores/gameStore'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 
 export const DragDropContext = () => {
-  const { tickets, updateScore, removeTicket } = useGameStore()
+  const { tickets, updateScore, removeTicket, setMaxTickets } = useGameStore()
   const [activeTicket, setActiveTicket] = React.useState<Ticket | null>(null)
+
+  // Détecte si on est en mode mobile
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
+  // Met à jour le nombre maximum de tickets en fonction de la taille d'écran
+  useEffect(() => {
+    setMaxTickets(isMobile ? 1 : 3)
+  }, [isMobile, setMaxTickets])
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -65,7 +74,7 @@ export const DragDropContext = () => {
       modifiers={[restrictToWindowEdges]}
     >
       {/* Section des tickets */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         {tickets.map((ticket) => (
           <TicketComponent
             key={ticket.id}
