@@ -51,7 +51,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-4 items-center mb-8 w-full max-w-md">
+      <div className="grid grid-cols-6 grid-rows-4 gap-4 items-center mb-8 w-full">
         {pendingTickets.map((ticket: Ticket) => (
           <TicketComponent
             key={ticket.id}
