@@ -1,49 +1,55 @@
-"use client";
+'use client'
 
-import { Category, Ticket } from "@/lib/tickets";
-import { useTicketsContext } from "@/providers/TicketsProviders";
-import React, { useState, useEffect } from "react";
+import { Category, Ticket } from '@/lib/tickets'
+import { useTicketsContext } from '@/providers/TicketsProviders'
+import React, { useState, useEffect, useRef } from 'react'
 
 interface TicketProps extends Ticket {
-  onDragStart: (e: React.DragEvent, category: Category) => void;
+  onDragStart: (e: React.DragEvent, category: Category) => void
 }
 
 export default function TicketComponent({ ...ticket }: TicketProps) {
-  const [timeLeft, setTimeLeft] = useState(ticket.timeToProcess);
-  const [isExploding, setIsExploding] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const isExpiring = useRef(false)
+  const [timeLeft, setTimeLeft] = useState(ticket.timeToProcess)
+  const [isExploding, setIsExploding] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
 
-  const { setTicketToExpired } = useTicketsContext();
+  const { setTicketToExpired } = useTicketsContext()
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
-        if (prev <= 1) {
-          setIsExploding(true);
-          setTimeout(() => setIsVisible(false), 800);
-          setTicketToExpired(ticket);
+        if (prev <= 1 && !isExpiring.current) {
+          isExpiring.current = true
+          setIsExploding(true)
+          setTimeout(() => {
+            setIsVisible(false)
+            setTicketToExpired(ticket)
+          }, 800)
+          clearInterval(timer)
+          return 0
         }
-        return Math.max(0, prev - 1);
-      });
-    }, 1000);
+        return Math.max(0, prev - 1)
+      })
+    }, 1000)
 
-    return () => clearInterval(timer);
-  }, []);
+    return () => clearInterval(timer)
+  }, [])
 
   const getPriorityColor = () => {
     switch (ticket.priority) {
-      case "critical":
-        return "bg-red-600";
-      case "major":
-        return "bg-orange-600";
-      case "medium":
-        return "bg-yellow-600";
+      case 'critical':
+        return 'bg-red-600'
+      case 'major':
+        return 'bg-orange-600'
+      case 'medium':
+        return 'bg-yellow-600'
       default:
-        return "bg-green-600";
+        return 'bg-green-600'
     }
-  };
+  }
 
-  if (!isVisible) return null;
+  if (!isVisible) return null
 
   return (
     <div className="w-full h-full border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all">
@@ -97,27 +103,27 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
         draggable
         onDragStart={(e) => ticket.onDragStart(e, ticket.category)}
         className={`relative p-4 w-full cursor-move transition-all ${
-          isExploding ? "animate-[fadeOut_0.5s_ease-out_forwards]" : ""
+          isExploding ? 'animate-[fadeOut_0.5s_ease-out_forwards]' : ''
         }`}
       >
         {isExploding && (
           <>
             {[...Array(40)].map((_, i) => {
-              const angle = (i / 40) * Math.PI * 2;
-              const distance = 150 + Math.random() * 100;
-              const tx = Math.cos(angle) * distance;
-              const ty = Math.sin(angle) * distance;
-              const delay = Math.random() * 0.3;
+              const angle = (i / 40) * Math.PI * 2
+              const distance = 150 + Math.random() * 100
+              const tx = Math.cos(angle) * distance
+              const ty = Math.sin(angle) * distance
+              const delay = Math.random() * 0.3
               const colors = [
-                "#FF4136",
-                "#FF851B",
-                "#FFDC00",
-                "#FFD700",
-                "#FFA500",
-              ];
-              const color = colors[Math.floor(Math.random() * colors.length)];
-              const sizes = ["small-spark", "medium-spark", "large-spark"];
-              const sparkSize = sizes[Math.floor(Math.random() * sizes.length)];
+                '#FF4136',
+                '#FF851B',
+                '#FFDC00',
+                '#FFD700',
+                '#FFA500',
+              ]
+              const color = colors[Math.floor(Math.random() * colors.length)]
+              const sizes = ['small-spark', 'medium-spark', 'large-spark']
+              const sparkSize = sizes[Math.floor(Math.random() * sizes.length)]
 
               return (
                 <div
@@ -125,16 +131,16 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
                   className={`spark ${sparkSize}`}
                   style={
                     {
-                      "--tx": `${tx}px`,
-                      "--ty": `${ty}px`,
+                      '--tx': `${tx}px`,
+                      '--ty': `${ty}px`,
                       backgroundColor: color,
-                      left: "50%",
-                      top: "50%",
+                      left: '50%',
+                      top: '50%',
                       animationDelay: `${delay}s`,
                     } as any
                   }
                 />
-              );
+              )
             })}
           </>
         )}
@@ -159,5 +165,5 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
