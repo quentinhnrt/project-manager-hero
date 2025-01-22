@@ -52,7 +52,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
   if (!isVisible) return null
 
   return (
-    <div className="w-full h-full border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all">
+    <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all">
       <style jsx>{`
         .spark {
           position: absolute;
@@ -102,7 +102,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
         id={ticket.id.toString()}
         draggable
         onDragStart={(e) => ticket.onDragStart(e, ticket.category)}
-        className={`relative p-4 w-full cursor-move transition-all ${
+        className={`relative p-4 w-full cursor-move transition-all flex flex-col justify-between h-full ${
           isExploding ? 'animate-[fadeOut_0.5s_ease-out_forwards]' : ''
         }`}
       >
@@ -154,11 +154,13 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
           </div>
           <span className="text-sm text-gray-500 ml-2">{timeLeft}s</span>
         </div>
-        <p className="text-gray-700 text-sm">{ticket.description}</p>
+        <p className="text-gray-700 text-sm line-clamp-2 min-h-10">
+          {ticket.description}
+        </p>
         <div className="mt-3 text-gray-400 text-xs">
           #{ticket.id}
           <span
-            className={`${getPriorityColor()} rounded-lg px-2 ml-2 font-medium text-white`}
+            className={`${getPriorityColor()} text-xs rounded-sm px-4 py-1 ml-2 font-medium text-white`}
           >
             {ticket.priority}
           </span>

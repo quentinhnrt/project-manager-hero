@@ -42,7 +42,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen p-4 flex flex-col items-center">
+    <main className="min-h-screen p-4 flex flex-col items-center justify-between">
       <div className="text-center mb-8 w-full">
         <p className="text-red-500">Tickets perdus: {expiredTickets.length}</p>
         <p className="text-green-500">Tickets echec: {lostTickets.length}</p>
@@ -51,7 +51,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 lg:grid-rows-4 gap-4 items-center mb-8 w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-4 lg:grid-rows-4 gap-4 items-center mb-8 w-full bg-slate-100 p-4 rounded-lg">
         {pendingTickets.map((ticket: Ticket) => (
           <TicketComponent
             key={ticket.id}
@@ -61,7 +61,7 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-7xl">
         {["support", "feature", "technical", "bug"].map((category) => (
           <CategoryCard
             key={category}
