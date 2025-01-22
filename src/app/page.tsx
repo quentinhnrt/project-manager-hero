@@ -61,7 +61,7 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-7xl">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full max-w-7xl lg:min-h-72">
         {["support", "feature", "technical", "bug"].map((category) => (
           <CategoryCard
             key={category}
