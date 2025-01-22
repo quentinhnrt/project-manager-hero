@@ -25,7 +25,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
           setTimeout(() => {
             setIsVisible(false)
             setTicketToExpired(ticket)
-          }, 800)
+          }, 500)
           clearInterval(timer)
           return 0
         }
