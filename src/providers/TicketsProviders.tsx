@@ -66,16 +66,11 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  useEffect(() => {
-    const newTicket = generateTicket(0);
-    setPendingTickets([...pendingTickets, newTicket]);
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      addTicket();
-    }, timeTillNextTicket);
-  }, [pendingTickets]);
+    useEffect(() => {
+        setTimeout(() => {
+            addTicket();
+        }, timeTillNextTicket);
+    }, [pendingTickets]);
 
   return (
     <TicketsContext.Provider
