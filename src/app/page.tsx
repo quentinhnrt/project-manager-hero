@@ -51,7 +51,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="grid grid-flow-col lg:grid-cols-4 lg:grid-rows-4 gap-4 items-center mb-8 w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-4 lg:grid-rows-4 gap-4 items-center mb-8 w-full">
         {pendingTickets.map((ticket: Ticket) => (
           <TicketComponent
             key={ticket.id}
