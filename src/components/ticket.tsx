@@ -46,7 +46,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="w-full max-w-md h-auto">
+    <div className="w-full h-full border border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all">
       <style jsx>{`
         .spark {
           position: absolute;
@@ -96,7 +96,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
         id={ticket.id.toString()}
         draggable
         onDragStart={(e) => ticket.onDragStart(e, ticket.category)}
-        className={`relative rounded-lg shadow-md p-4 w-full cursor-move hover:shadow-lg transition-all ${
+        className={`relative p-4 w-full cursor-move transition-all ${
           isExploding ? "animate-[fadeOut_0.5s_ease-out_forwards]" : ""
         }`}
       >
@@ -139,7 +139,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
           </>
         )}
 
-        <div className="flex justify-between items-start mb-3">
+        <div className="flex justify-between items-center mb-3">
           <div className="h-1 bg-gray-200 rounded-full w-full">
             <div
               className="h-full bg-blue-500 rounded-full transition-all duration-1000"
