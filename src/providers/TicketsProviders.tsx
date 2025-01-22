@@ -67,11 +67,16 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      addTicket()
-    }, timeTillNextTicket)
+    if (lastId === 0) {
+        addTicket()
+    } else {
+      const timer = setTimeout(() => {
+        addTicket()
+      }, timeTillNextTicket)
 
-    return () => clearTimeout(timer)
+      return () => clearTimeout(timer)
+    }
+
   }, [pendingTickets, timeTillNextTicket])
 
   return (

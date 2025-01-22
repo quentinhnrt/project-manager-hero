@@ -38,105 +38,74 @@ const ticketTemplates: Record<Category, string[]> = {
         "Restructurer {component} pour {action}"
     ],
     support: [
-        "{userType} ne peut pas {action}",
+        "Les {userType} ne peuvent pas {action}",
         "Accompagnement demandé pour {action} dans {component}",
         "Guide utilisateur nécessaire pour {feature}"
     ]
 };
 
 const variableComponents: string[] = [
-    "Le header",
-    "Le footer",
-    "Le bouton",
-    "Le formulaire",
-    "La liste",
-    "Le tableau",
-    "Le graphique",
-    "Le menu",
-    "Le panneau",
-    "La modal",
-    "La page",
+    "le header",
+    "le footer",
+    "le bouton",
+    "le formulaire",
+    "la liste",
+    "le tableau",
+    "le graphique",
+    "le menu",
+    "le panneau",
+    "la modal",
+    "la page contact"
 ];
 
-const variableActions: string[] = [
-    "l'ouverture",
-    "la fermeture",
-    "la validation",
-    "l'envoi",
-    "la suppression",
-    "la modification",
-    "la sélection",
-    "le tri",
-    "le filtrage",
-    "la recherche",
-    "l'ajout",
-    "la suppression",
-    "l'édition",
-    "l'annulation"
-];
+const variableActions: Record<Category, string[]> = {
+    bug: [
+        "l'ouverture",
+        "la fermeture",
+        "la validation",
+        "l'envoi",
+        "la suppression"
+    ],
+    feature: [
+        "l'ajout",
+        "la suppression",
+        "l'édition",
+        "la personnalisation",
+        "l'adaptation"
+    ],
+    technical: [
+        "le tri",
+        "le filtrage",
+        "la recherche",
+        "l'optimisation",
+        "l'intégration"
+    ],
+    support: [
+        "configurer",
+        "dépanner",
+        "former",
+        "assister",
+        "débogguer"
+    ]
+};
 
 const variableUserTypes: string[] = [
     "utilisateurs",
     "clients",
     "administrateurs",
     "modérateurs",
-    "développeurs",
-    "testeurs",
     "visiteurs",
-    "abonnés",
-    "membres",
-    "invités",
-    "personnes"
+    "abonnés"
 ];
 
 const variableFeatures: string[] = [
     "l'interface",
     "l'expérience utilisateur",
     "la performance",
-    "les fonctionnalités",
-    "les interactions",
-    "les animations",
-    "les transitions",
-    "les effets",
-    "les retours visuels",
-    "les retours utilisateurs",
-    "la compatibilité",
     "la sécurité",
     "la stabilité",
-    "la fiabilité",
     "l'accessibilité",
-    "la lisibilité",
-    "la cohérence",
-    "la simplicité",
-    "la clarté",
-    "la fluidité",
-    "la réactivité",
-    "l'ergonomie",
-    "la personnalisation",
-    "la configuration",
-    "l'adaptabilité",
-    "la flexibilité",
-    "la modularité",
-    "la scalabilité",
-    "la maintenabilité",
-    "la compatibilité",
-    "l'interopérabilité",
-    "la documentation",
-    "le support",
-    "la formation",
-    "l'assistance",
-    "le dépannage",
-    "le débogage",
-    "le monitoring",
-    "le reporting",
-    "l'analyse",
-    "la gestion",
-    "l'administration",
-    "la configuration",
-    "la personnalisation",
-    "le paramétrage",
-    "la gestion des droits",
-    "la gestion des rôles",
+    "la documentation"
 ];
 
 const ticketTimeToProcess: Record<Priority, number> = {
@@ -144,7 +113,7 @@ const ticketTimeToProcess: Record<Priority, number> = {
     medium: 35,
     major: 15,
     critical: 10
-}
+};
 
 const categories: Category[] = ["bug", "feature", "technical", "support"];
 const priorities: Priority[] = ["minor", "medium", "major", "critical"];
@@ -173,7 +142,8 @@ function generateDescription(category: Category): string {
     }
 
     if (template.includes("{action}")) {
-        variables.action = variableActions[Math.floor(Math.random() * variableActions.length)];
+        const actions = variableActions[category];
+        variables.action = actions[Math.floor(Math.random() * actions.length)];
     }
 
     if (template.includes("{userType}")) {
@@ -184,5 +154,8 @@ function generateDescription(category: Category): string {
         variables.feature = variableFeatures[Math.floor(Math.random() * variableFeatures.length)];
     }
 
-    return template.replace(/{(\w+)}/g, (match, key) => variables[key as keyof TemplateVariables] || `[${key}]`);
+    const description = template.replace(/{(\w+)}/g, (match, key) => variables[key as keyof TemplateVariables] || `[${key}]`);
+
+    // make the first letter uppercase
+    return description.charAt(0).toUpperCase() + description.slice(1);
 }
