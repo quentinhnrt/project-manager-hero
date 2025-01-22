@@ -1,7 +1,7 @@
 'use client'
 
 import { CategoryCard } from '@/components/category-card'
-import ScoreBoard from '@/components/game/ScoreBoard'
+import ScoreBoard from '@/components/score-board'
 import TicketComponent from '@/components/ticket'
 import { Category, Ticket } from '@/lib/tickets'
 import { useTicketsContext } from '@/providers/TicketsProviders'
@@ -45,14 +45,6 @@ export default function Home() {
   return (
     <main className="min-h-screen p-4 flex flex-col items-center justify-between">
       <ScoreBoard />
-
-      <div className="text-center mb-8 w-full">
-        <p className="text-red-500">Tickets perdus: {expiredTickets.length}</p>
-        <p className="text-green-500">Tickets echec: {lostTickets.length}</p>
-        <p className="text-green-500">
-          Tickets trouvé: {processedTickets.length}
-        </p>
-      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 lg:grid-rows-4 gap-4 items-center mb-8 w-full bg-slate-100 p-4 rounded-lg">
         {pendingTickets.map((ticket: Ticket) => (
