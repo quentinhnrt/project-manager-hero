@@ -25,7 +25,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
           setTimeout(() => {
             setIsVisible(false)
             setTicketToExpired(ticket)
-          }, 800)
+          }, 500)
           clearInterval(timer)
           return 0
         }
@@ -102,7 +102,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
         id={ticket.id.toString()}
         draggable
         onDragStart={(e) => ticket.onDragStart(e, ticket.category)}
-        className={`relative p-4 w-full cursor-move transition-all flex flex-col justify-between h-full ${
+        className={`relative p-2 lg:p-4 w-full cursor-move transition-all flex flex-col justify-between h-full ${
           isExploding ? 'animate-[fadeOut_0.5s_ease-out_forwards]' : ''
         }`}
       >
@@ -145,7 +145,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
           </>
         )}
 
-        <div className="flex justify-between items-center mb-3">
+        <div className="flex justify-between items-center mb-2">
           <div className="h-1 bg-gray-200 rounded-full w-full">
             <div
               className="h-full bg-blue-500 rounded-full transition-all duration-1000"
@@ -157,7 +157,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
         <p className="text-gray-700 text-sm line-clamp-2 min-h-10">
           {ticket.description}
         </p>
-        <div className="mt-3 text-gray-400 text-xs">
+        <div className="mt-1 text-gray-400 text-xs">
           #{ticket.id}
           <span
             className={`${getPriorityColor()} text-xs rounded-sm px-4 py-1 ml-2 font-medium text-white`}
