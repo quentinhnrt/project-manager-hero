@@ -1,28 +1,19 @@
 "use client";
 
+import { Category, Ticket } from "@/lib/tickets";
+import { useTicketsContext } from "@/providers/TicketsProviders";
 import React, { useState, useEffect } from "react";
-import { Category } from "@/app/page";
 
-type TicketProps = {
-  id: number;
-  description: string;
-  category: Category;
-  timeToProcess: number;
-  priority: string;
+interface TicketProps extends Ticket {
   onDragStart: (e: React.DragEvent, category: Category) => void;
-};
+}
 
-export default function Ticket({
-  id,
-  description,
-  category,
-  timeToProcess,
-  priority,
-  onDragStart,
-}: TicketProps) {
-  const [timeLeft, setTimeLeft] = useState(timeToProcess);
+export default function TicketComponent({ ...ticket }: TicketProps) {
+  const [timeLeft, setTimeLeft] = useState(ticket.timeToProcess);
   const [isExploding, setIsExploding] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+
+  const { setTicketToExpired } = useTicketsContext();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -30,6 +21,7 @@ export default function Ticket({
         if (prev <= 1) {
           setIsExploding(true);
           setTimeout(() => setIsVisible(false), 800);
+          setTicketToExpired(ticket);
         }
         return Math.max(0, prev - 1);
       });
@@ -39,7 +31,7 @@ export default function Ticket({
   }, []);
 
   const getPriorityColor = () => {
-    switch (priority) {
+    switch (ticket.priority) {
       case "critical":
         return "bg-red-600";
       case "major":
@@ -101,9 +93,9 @@ export default function Ticket({
       `}</style>
 
       <div
-        id={id.toString()}
+        id={ticket.id.toString()}
         draggable
-        onDragStart={(e) => onDragStart(e, category)}
+        onDragStart={(e) => ticket.onDragStart(e, ticket.category)}
         className={`relative rounded-lg shadow-md p-4 w-full cursor-move hover:shadow-lg transition-all ${
           isExploding ? "animate-[fadeOut_0.5s_ease-out_forwards]" : ""
         }`}
@@ -151,18 +143,18 @@ export default function Ticket({
           <div className="h-1 bg-gray-200 rounded-full w-full">
             <div
               className="h-full bg-blue-500 rounded-full transition-all duration-1000"
-              style={{ width: `${(timeLeft / timeToProcess) * 100}%` }}
+              style={{ width: `${(timeLeft / ticket.timeToProcess) * 100}%` }}
             />
           </div>
           <span className="text-sm text-gray-500 ml-2">{timeLeft}s</span>
         </div>
-        <p className="text-gray-700 text-sm">{description}</p>
+        <p className="text-gray-700 text-sm">{ticket.description}</p>
         <div className="mt-3 text-gray-400 text-xs">
-          #{id}
+          #{ticket.id}
           <span
             className={`${getPriorityColor()} rounded-lg px-2 ml-2 font-medium text-white`}
           >
-            {priority}
+            {ticket.priority}
           </span>
         </div>
       </div>
