@@ -1,8 +1,8 @@
 'use client'
 
 import { create } from 'zustand'
-import { type Ticket, type ScoreState, type GameEvent } from '../types/ticket'
-import { generateTicket } from '../utils/ticketGenerator'
+import { type Ticket, type ScoreState, type GameEvent } from '@/types/ticket'
+import { generateTicket } from '@/utils/ticketGenerator'
 
 interface GameState {
   isPlaying: boolean
@@ -42,6 +42,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   startGame: () => {
     // Nettoyage de l'intervalle précédent si existant
     if (get().ticketGenerationInterval) {
+      // @ts-expect-error Prevent warning deploy
       clearInterval(get().ticketGenerationInterval)
     }
 

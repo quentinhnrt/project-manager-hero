@@ -34,7 +34,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [])
+  }, [setTicketToExpired, ticket])
 
   const getPriorityColor = () => {
     switch (ticket.priority) {
@@ -137,7 +137,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
                       left: '50%',
                       top: '50%',
                       animationDelay: `${delay}s`,
-                    } as any
+                    } as React.CSSProperties
                   }
                 />
               )

@@ -1,6 +1,6 @@
 "use client";
 
-import { Category } from "@/app/page";
+import { Category } from "@/lib/tickets";
 import React from "react";
 
 interface CategoryCardProps {

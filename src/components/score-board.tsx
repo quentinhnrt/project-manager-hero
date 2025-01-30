@@ -2,13 +2,11 @@
 
 import React, { useState, useEffect, useMemo } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import {
   Trophy,
   ThumbsUp,
   ThumbsDown,
-  Percent,
   Flame,
   Star,
 } from 'lucide-react'

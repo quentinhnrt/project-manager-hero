@@ -10,9 +10,6 @@ import React from 'react'
 export default function Home() {
   const {
     pendingTickets,
-    expiredTickets,
-    processedTickets,
-    lostTickets,
     setTicketToLost,
     setTicketToProcessed,
   } = useTicketsContext()

@@ -55,18 +55,18 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
     setPendingTickets(pendingTickets.filter((t) => t.id !== ticket.id))
   }
 
-  function addTicket() {
-    const id = lastId + 1
-    if (pendingTickets.length < ticketsLimit) {
-      const newTicket = generateTicket(id)
-      setLastId(id)
-      const randTime = Math.floor(Math.random() * 3000) + 2000
-      setTimeTillNextTicket(randTime)
-      setPendingTickets([...pendingTickets, newTicket])
-    }
-  }
-
   useEffect(() => {
+    function addTicket() {
+      const id = lastId + 1
+      if (pendingTickets.length < ticketsLimit) {
+        const newTicket = generateTicket(id)
+        setLastId(id)
+        const randTime = Math.floor(Math.random() * 3000) + 2000
+        setTimeTillNextTicket(randTime)
+        setPendingTickets([...pendingTickets, newTicket])
+      }
+    }
+    
     if (lastId === 0) {
         addTicket()
     } else {
@@ -77,7 +77,7 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
       return () => clearTimeout(timer)
     }
 
-  }, [pendingTickets, timeTillNextTicket])
+  }, [lastId, pendingTickets, ticketsLimit, timeTillNextTicket])
 
   return (
     <TicketsContext.Provider
