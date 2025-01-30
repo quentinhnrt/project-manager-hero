@@ -47,13 +47,17 @@ export default function Home() {
       <ScoreBoard />
 
       <div className="grid grid-cols-1 gap-2 max-h-[360px] overflow-hidden items-center mb-4 w-full bg-slate-100 p-4 rounded-lg lg:max-h-none lg:overflow-auto lg:grid-cols-4 lg:grid-rows-4 lg:gap-4 ">
-        {pendingTickets.map((ticket: Ticket) => (
-          <TicketComponent
-            key={ticket.id}
-            {...ticket}
-            onDragStart={handleDragStart}
-          />
-        ))}
+        {pendingTickets.length === 0 ? (
+          <p className='text-lg font-bold'>Il n&apos;y a plus de ticket à traiter</p>
+        ) : (
+          pendingTickets.map((ticket: Ticket) => (
+            <TicketComponent
+              key={ticket.id}
+              {...ticket}
+              onDragStart={handleDragStart}
+            />
+          ))
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full max-w-7xl lg:min-h-72">
