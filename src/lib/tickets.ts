@@ -109,10 +109,10 @@ const variableFeatures: string[] = [
 ];
 
 const ticketTimeToProcess: Record<Priority, number> = {
-    minor: 50,
-    medium: 35,
-    major: 15,
-    critical: 10
+    minor: 20,
+    medium: 15,
+    major: 10,
+    critical: 5
 };
 
 const categories: Category[] = ["bug", "feature", "technical", "support"];
