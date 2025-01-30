@@ -61,7 +61,7 @@ const ScoreBoard = () => {
   }, [stats.currentScore, displayedScore])
 
   return (
-    <Card className="bg-card w-full">
+    <Card className="bg-card w-full max-w-7xl mx-auto">
       <CardContent className="flex flex-col md:flex-row items-center justify-between p-4 gap-4">
         {/* Score and Multipliers */}
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
