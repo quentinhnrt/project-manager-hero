@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Category, LostTicket, Ticket, generateTicket } from '@/lib/tickets'
+import {useSettingsContext} from "@/providers/SettingsProvider";
 
 export type TicketsContextType = {
   pendingTickets: Ticket[]
@@ -35,6 +36,7 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
   const [ticketsLimit, setTicketsLimit] = useState(3)
   const [lastId, setLastId] = useState<number>(0)
   const [timeTillNextTicket, setTimeTillNextTicket] = useState(2000)
+  const { paused, isHardMode } = useSettingsContext()
 
   const setTicketToLost = (ticket: Ticket, selectedCategory: Category) => {
     const lostTicket: LostTicket = {
@@ -56,10 +58,19 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
+    if (paused) {
+      setPendingTickets([])
+      setExpiredTickets([])
+      setProcessedTickets([])
+      setLostTickets([])
+    }
+  }, [isHardMode]);
+
+  useEffect(() => {
     function addTicket() {
       const id = lastId + 1
       if (pendingTickets.length < ticketsLimit) {
-        const newTicket = generateTicket(id)
+        const newTicket = generateTicket(id, isHardMode)
         setLastId(id)
         const randTime = Math.floor(Math.random() * 3000) + 2000
         setTimeTillNextTicket(randTime)
@@ -77,7 +88,7 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
       return () => clearTimeout(timer)
     }
 
-  }, [lastId, pendingTickets, ticketsLimit, timeTillNextTicket])
+  }, [lastId, pendingTickets, ticketsLimit, timeTillNextTicket, paused])
 
   return (
     <TicketsContext.Provider
