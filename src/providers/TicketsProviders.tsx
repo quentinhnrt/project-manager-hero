@@ -1,5 +1,4 @@
 'use client'
-
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Category, LostTicket, Ticket, generateTicket } from '@/lib/tickets'
 
@@ -20,7 +19,7 @@ const TicketsContext = createContext<TicketsContextType>({
   expiredTickets: [],
   processedTickets: [],
   lostTickets: [],
-  ticketsLimit: 3,
+  ticketsLimit: 12,
   setTicketToLost: () => {},
   setTicketToExpired: () => {},
   setTicketToProcessed: () => {},
@@ -32,9 +31,25 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
   const [expiredTickets, setExpiredTickets] = useState<Ticket[]>([])
   const [processedTickets, setProcessedTickets] = useState<Ticket[]>([])
   const [lostTickets, setLostTickets] = useState<LostTicket[]>([])
-  const [ticketsLimit, setTicketsLimit] = useState(3)
+  const [ticketsLimit, setTicketsLimit] = useState(getInitialTicketsLimit)
   const [lastId, setLastId] = useState<number>(0)
   const [timeTillNextTicket, setTimeTillNextTicket] = useState(2000)
+
+  // Function to determine tickets limit based on screen size
+  function getInitialTicketsLimit(): number {
+    if (typeof window === 'undefined') return 12 // Default for SSR
+    return window.innerWidth < 1024 ? 3 : 12
+  }
+
+  // Add an effect to update tickets limit on resize
+  useEffect(() => {
+    function handleResize() {
+      setTicketsLimit(getInitialTicketsLimit())
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const setTicketToLost = (ticket: Ticket, selectedCategory: Category) => {
     const lostTicket: LostTicket = {
@@ -61,14 +76,14 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
       if (pendingTickets.length < ticketsLimit) {
         const newTicket = generateTicket(id)
         setLastId(id)
-        const randTime = Math.floor(Math.random() * 3000) + 2000
+        const randTime = Math.floor(Math.random() * 1000) + 1500
         setTimeTillNextTicket(randTime)
         setPendingTickets([...pendingTickets, newTicket])
       }
     }
-    
+
     if (lastId === 0) {
-        addTicket()
+      addTicket()
     } else {
       const timer = setTimeout(() => {
         addTicket()
@@ -76,7 +91,6 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
 
       return () => clearTimeout(timer)
     }
-
   }, [lastId, pendingTickets, ticketsLimit, timeTillNextTicket])
 
   return (
