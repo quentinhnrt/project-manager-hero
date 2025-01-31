@@ -5,6 +5,17 @@ import ScoreBoard from '@/components/score-board'
 import TicketComponent from '@/components/ticket'
 import { Category, Ticket } from '@/lib/tickets'
 import { useTicketsContext } from '@/providers/TicketsProviders'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import React from 'react'
 
 export default function Home() {
@@ -40,10 +51,22 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen gap-4 lg:gap-0 p-0 lg:p-4 flex flex-col items-center lg:justify-between">
+    <main className="min-h-screen gap-2 lg:gap-0 p-0 lg:p-4 flex flex-col items-center lg:justify-between">
+    <AlertDialog>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Project Manager Hero</AlertDialogTitle>
+          <AlertDialogDescription>
+            Bienvenue sur notre jeu de tri de ticket ou le but est de trier les tickets en fonction de leur catégorie. Afin d'avoir le meilleur score possible. Un système de multiplicateur est en place pour augmenter votre score.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Jouer</AlertDialogCancel>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
       <ScoreBoard />
-
-      <div className="grid grid-rows-3 gap-2 max-h-[360px] overflow-hidden items-center mb-4 w-full bg-slate-100 p-4 rounded-lg lg:max-h-none lg:overflow-auto lg:grid-cols-4 lg:grid-rows-4 lg:gap-4 ">
+      <div className="grid grid-rows-3 gap-2 max-h-[360px] overflow-hidden items-center w-full bg-slate-100 p-2 lg:p-4 rounded-lg lg:max-h-none lg:overflow-auto lg:grid-cols-4 lg:grid-rows-4 lg:gap-4 ">
         {pendingTickets.length === 0 ? (
           <p className='text-lg font-bold'>Il n&apos;y a plus de ticket à traiter</p>
         ) : (
