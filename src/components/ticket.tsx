@@ -119,9 +119,9 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
 
       <div
         id={ticket.id.toString()}
-        draggable
-        onDragStart={(e) => ticket.onDragStart(e, ticket.category)}
-        className={`relative p-2 lg:p-4 w-full cursor-move transition-all flex flex-col justify-between h-full
+        draggable={!isBlur}
+        onDragStart={(e) => !isBlur && ticket.onDragStart(e, ticket.category)}
+        className={`relative p-2 lg:p-4 w-full transition-all flex flex-col justify-between h-full
            ${isExploding ? 'animate-[fadeOut_0.5s_ease-out_forwards]' : ''}`}
       >
         {isExploding && (
