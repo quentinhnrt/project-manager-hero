@@ -62,9 +62,9 @@ const ScoreBoard = () => {
 
   return (
     <Card className="bg-card w-full max-w-7xl mx-auto">
-      <CardContent className="flex flex-col md:flex-row items-center justify-between p-4 gap-4">
+      <CardContent className="flex flex-row items-center justify-between p-2 md:p-4 gap-4">
         {/* Score and Multipliers */}
-        <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+        <div className="flex flex-row gap-2 items-center md:gap-4 w-full md:w-auto">
           <div className="flex items-center gap-2">
             <Trophy className="h-6 w-6 text-yellow-500" />
             <span className="text-2xl md:text-3xl font-bold">
@@ -102,7 +102,7 @@ const ScoreBoard = () => {
         </div>
 
         {/* Stats */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-end gap-4">
           <div className="flex items-center gap-1">
             <ThumbsUp className="h-5 w-5 text-green-500" />
             <span className="font-medium">{stats.correctAnswers}</span>
@@ -119,7 +119,7 @@ const ScoreBoard = () => {
             <Separator orientation="vertical" className="h-8" />
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="items-center gap-1 hidden md:flex">
             <span className="font-medium">
               {(stats.ratio * 100).toFixed(0)}%
             </span>
