@@ -19,7 +19,7 @@ const ScoreBoard = () => {
 
   return (
     <Card className="bg-card w-full max-w-7xl mx-auto">
-      <CardContent className="flex flex-row items-center justify-between p-2 md:p-4 gap-4">
+      <CardContent className="flex flex-row items-center justify-between p-2 pb-0 md:p-4 gap-4">
         {/* Score and Multipliers */}
         <div className="flex flex-row gap-2 items-center md:gap-4 w-full md:w-auto">
           <div className="flex items-center gap-2">

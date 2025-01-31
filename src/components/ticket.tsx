@@ -9,6 +9,8 @@ interface TicketProps extends Ticket {
 }
 
 export default function TicketComponent({ ...ticket }: TicketProps) {
+  const [isBlur, setIsBlur] = useState(true)
+  const [isTimerStarted, setIsTimerStarted] = useState(false)
   const isExpiring = useRef(false)
   const [timeLeft, setTimeLeft] = useState(ticket.timeToProcess)
   const [isExploding, setIsExploding] = useState(false)
@@ -17,6 +19,17 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
   const { setTicketToExpired } = useTicketsContext()
 
   useEffect(() => {
+    const blurTimer = setTimeout(() => {
+      setIsBlur(false)
+      setIsTimerStarted(true)
+    }, 1000)
+
+    return () => clearTimeout(blurTimer)
+  }, [])
+
+  useEffect(() => {
+    if (!isTimerStarted) return
+
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1 && !isExpiring.current) {
@@ -34,7 +47,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [setTicketToExpired, ticket])
+  }, [isTimerStarted, setTicketToExpired, ticket])
 
   const getPriorityColor = () => {
     switch (ticket.priority) {
@@ -52,7 +65,13 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
   if (!isVisible) return null
 
   return (
-    <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all">
+    <div
+      className="w-full h-full bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all"
+      style={{
+        filter: isBlur ? 'blur(5px)' : 'none',
+        transition: 'filter 0.3s ease-out',
+      }}
+    >
       <style jsx>{`
         .spark {
           position: absolute;
@@ -102,9 +121,8 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
         id={ticket.id.toString()}
         draggable
         onDragStart={(e) => ticket.onDragStart(e, ticket.category)}
-        className={`relative p-2 lg:p-4 w-full cursor-move transition-all flex flex-col justify-between h-full ${
-          isExploding ? 'animate-[fadeOut_0.5s_ease-out_forwards]' : ''
-        }`}
+        className={`relative p-2 lg:p-4 w-full cursor-move transition-all flex flex-col justify-between h-full
+           ${isExploding ? 'animate-[fadeOut_0.5s_ease-out_forwards]' : ''}`}
       >
         {isExploding && (
           <>

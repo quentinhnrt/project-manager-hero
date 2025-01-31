@@ -29,7 +29,7 @@ export function CategoryCard({
 
   return (
     <div
-      className={`${getBackgroundColor()} p-4 lg:p-6 rounded-lg border-2 text-center text-2xl font-bold min-h-32 w-full flex items-center justify-center transition-colors`}
+      className={`${getBackgroundColor()} p-4 lg:p-6 rounded-lg border-2 text-center text-2xl font-bold min-h-24 w-full flex items-center justify-center transition-colors`}
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
