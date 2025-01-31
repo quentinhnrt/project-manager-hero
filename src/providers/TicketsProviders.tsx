@@ -82,6 +82,7 @@ function TicketsContextProvider({ children }: { children: React.ReactNode }) {
   }, [isHardMode]);
 
   useEffect(() => {
+    if (paused) return;
     function addTicket() {
       const id = lastId + 1
       if (pendingTickets.length < ticketsLimit) {
