@@ -12,7 +12,7 @@ import {
 import {useScoreContext} from "@/providers/ScoreProvider";
 import {useTicketsContext} from "@/providers/TicketsProviders";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialog, AlertDialogCancel,
   AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -102,7 +102,7 @@ const ScoreBoard = () => {
               <AlertDialogHeader>
                 <AlertDialogTitle>Project Manager Hero</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Bienvenue sur notre jeu de tri de ticket ou le but est de trier les tickets en fonction de leur catégorie. Afin d'avoir le meilleur score possible. Un système de multiplicateur est en place pour augmenter votre score.
+                  Bienvenue sur notre jeu de tri de ticket ou le but est de trier les tickets en fonction de leur catégorie. Afin d&apos;avoir le meilleur score possible. Un système de multiplicateur est en place pour augmenter votre score.
                 </AlertDialogDescription>
               </AlertDialogHeader>
 
