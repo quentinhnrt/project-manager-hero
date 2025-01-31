@@ -118,11 +118,15 @@ const ticketTimeToProcess: Record<Priority, number> = {
 const categories: Category[] = ["bug", "feature", "technical", "support"];
 const priorities: Priority[] = ["minor", "medium", "major", "critical"];
 
-export function generateTicket(id: number): Ticket {
+export function generateTicket(id: number, isHardMode: boolean = false): Ticket {
     const category = categories[Math.floor(Math.random() * categories.length)];
     const priority = priorities[Math.floor(Math.random() * priorities.length)];
     const description = generateDescription(category);
-    const timeToProcess = ticketTimeToProcess[priority];
+    let timeToProcess = ticketTimeToProcess[priority];
+
+    if (isHardMode) {
+        timeToProcess = Math.floor(timeToProcess * 0.75);
+    }
 
     return {
         id,

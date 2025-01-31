@@ -3,6 +3,7 @@
 import { Category, Ticket } from '@/lib/tickets'
 import { useTicketsContext } from '@/providers/TicketsProviders'
 import React, { useState, useEffect, useRef } from 'react'
+import {useSettingsContext} from "@/providers/SettingsProvider";
 
 interface TicketProps extends Ticket {
   onDragStart: (e: React.DragEvent, category: Category) => void
@@ -15,6 +16,7 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
   const [timeLeft, setTimeLeft] = useState(ticket.timeToProcess)
   const [isExploding, setIsExploding] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
+  const { paused } = useSettingsContext()
 
   const { setTicketToExpired } = useTicketsContext()
 
@@ -32,6 +34,10 @@ export default function TicketComponent({ ...ticket }: TicketProps) {
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
+        if (paused) {
+            return prev
+        }
+
         if (prev <= 1 && !isExpiring.current) {
           isExpiring.current = true
           setIsExploding(true)

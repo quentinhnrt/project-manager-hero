@@ -11,10 +11,21 @@ import {
 } from 'lucide-react'
 import {useScoreContext} from "@/providers/ScoreProvider";
 import {useTicketsContext} from "@/providers/TicketsProviders";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+import {useSettingsContext} from "@/providers/SettingsProvider";
+import {Button} from "@/components/ui/button";
+import React from "react";
 
 const ScoreBoard = () => {
   const { score, multiplier, streak, ratio } = useScoreContext()
   const { processedTickets, lostTickets, expiredTickets } = useTicketsContext()
+  const { paused, setPaused, isHardMode, setIsHardMode } = useSettingsContext()
 
 
   return (
@@ -61,26 +72,52 @@ const ScoreBoard = () => {
         {/* Stats */}
         <div className="flex items-center justify-end gap-4">
           <div className="flex items-center gap-1">
-            <ThumbsUp className="h-5 w-5 text-green-500" />
+            <ThumbsUp className="h-5 w-5 text-green-500"/>
             <span className="font-medium">{processedTickets.length}</span>
           </div>
 
           <div className="flex items-center gap-1">
-            <ThumbsDown className="h-5 w-5 text-red-500" />
+            <ThumbsDown className="h-5 w-5 text-red-500"/>
             <span className="font-medium">
               {lostTickets.length + expiredTickets.length}
             </span>
           </div>
 
-          <div className="hidden md:block">
-            <Separator orientation="vertical" className="h-8" />
-          </div>
 
           <div className="items-center gap-1 hidden md:flex">
             <span className="font-medium">
               {ratio.toFixed(0)}%
             </span>
           </div>
+
+          <div className="hidden md:block">
+            <Separator orientation="vertical" className="h-8"/>
+          </div>
+
+          <AlertDialog open={paused}>
+            <AlertDialogTrigger onClick={() => setPaused(true)}>
+              Pause
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Project Manager Hero</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Bienvenue sur notre jeu de tri de ticket ou le but est de trier les tickets en fonction de leur catégorie. Afin d'avoir le meilleur score possible. Un système de multiplicateur est en place pour augmenter votre score.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+
+              {!isHardMode ? (
+                  <Button onClick={() => setIsHardMode(true)}>Mode difficile</Button>
+              ) : (
+                  <Button onClick={() => setIsHardMode(false)}>Mode facile</Button>
+              )}
+
+
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setPaused(false)}>Jouer</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </CardContent>
     </Card>

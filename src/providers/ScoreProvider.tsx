@@ -2,6 +2,7 @@
 
 import {createContext, useContext, useEffect, useState} from "react";
 import {useTicketsContext} from "@/providers/TicketsProviders";
+import {useSettingsContext} from "@/providers/SettingsProvider";
 
 type ScoreContextType = {
     score: number;
@@ -24,6 +25,15 @@ function ScoreContextProvider({children}: { children: React.ReactNode }) {
     const [streak, setStreak] = useState(0);
     const [ratio, setRatio] = useState(100);
     const scoreAmount = 100;
+    const {isHardMode} = useSettingsContext();
+
+    useEffect(() => {
+        if (isHardMode) {
+            setScore(0);
+            setMultiplier(1);
+            setStreak(0);
+        }
+    }, [isHardMode]);
 
     useEffect(() => {
         const wrongTickets = lostTickets.length + expiredTickets.length;
