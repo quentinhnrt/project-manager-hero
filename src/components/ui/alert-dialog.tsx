@@ -6,7 +6,11 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
-const AlertDialog = AlertDialogPrimitive.Root
+const AlertDialog = ({ children, ...props }: AlertDialogPrimitive.AlertDialogProps) => (
+  <AlertDialogPrimitive.Root defaultOpen {...props}>
+    {children}
+  </AlertDialogPrimitive.Root>
+)
 
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger
 
@@ -117,8 +121,8 @@ const AlertDialogCancel = React.forwardRef<
   <AlertDialogPrimitive.Cancel
     ref={ref}
     className={cn(
-      buttonVariants({ variant: "outline" }),
-      "mt-2 sm:mt-0",
+      buttonVariants({ variant: "default" }),
+      "mt-2 sm:mt-0 mx-auto min-w-32",
       className
     )}
     {...props}
