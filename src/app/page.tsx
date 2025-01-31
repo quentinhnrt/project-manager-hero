@@ -8,11 +8,8 @@ import { useTicketsContext } from '@/providers/TicketsProviders'
 import React from 'react'
 
 export default function Home() {
-  const {
-    pendingTickets,
-    setTicketToLost,
-    setTicketToProcessed,
-  } = useTicketsContext()
+  const { pendingTickets, setTicketToLost, setTicketToProcessed } =
+    useTicketsContext()
 
   const handleDragStart = (e: React.DragEvent, category: Category) => {
     e.dataTransfer.setData('category', category)
@@ -45,7 +42,9 @@ export default function Home() {
 
       <div className="grid grid-cols-1 gap-2 max-h-[360px] overflow-hidden items-center mb-4 w-full bg-slate-100 p-4 rounded-lg lg:max-h-none lg:overflow-auto lg:grid-cols-4 lg:grid-rows-4 lg:gap-4 ">
         {pendingTickets.length === 0 ? (
-          <p className='text-lg font-bold'>Il n&apos;y a plus de ticket à traiter</p>
+          <p className="text-lg font-bold">
+            Il n&apos;y a plus de ticket à traiter
+          </p>
         ) : (
           pendingTickets.map((ticket: Ticket) => (
             <TicketComponent
@@ -57,7 +56,7 @@ export default function Home() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full max-w-7xl lg:min-h-72">
+      <div className="hidden lg:grid lg:grid-cols-4 lg:gap-4 w-full lg:min-h-72">
         {['support', 'feature', 'technical', 'bug'].map((category) => (
           <CategoryCard
             key={category}
