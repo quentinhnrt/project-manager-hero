@@ -40,10 +40,10 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen px-2 py-0 md:p-4 flex flex-col items-center justify-between">
+    <main className="min-h-screen gap-4 lg:gap-0 p-0 lg:p-4 flex flex-col items-center lg:justify-between">
       <ScoreBoard />
 
-      <div className="grid grid-cols-1 gap-2 max-h-[360px] overflow-hidden items-center mb-4 w-full bg-slate-100 p-4 rounded-lg lg:max-h-none lg:overflow-auto lg:grid-cols-4 lg:grid-rows-4 lg:gap-4 ">
+      <div className="grid grid-rows-3 gap-2 max-h-[360px] overflow-hidden items-center mb-4 w-full bg-slate-100 p-4 rounded-lg lg:max-h-none lg:overflow-auto lg:grid-cols-4 lg:grid-rows-4 lg:gap-4 ">
         {pendingTickets.length === 0 ? (
           <p className='text-lg font-bold'>Il n&apos;y a plus de ticket à traiter</p>
         ) : (
@@ -57,7 +57,7 @@ export default function Home() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full max-w-7xl lg:min-h-72">
+      <div className="gap-1 px-2 md:px-0 grid grid-rows-2 grid-cols-2 lg:grid-cols-4 lg:grid-rows-1 lg:gap-4 w-full max-w-7xl lg:min-h-72">
         {['support', 'feature', 'technical', 'bug'].map((category) => (
           <CategoryCard
             key={category}
