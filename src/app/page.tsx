@@ -57,7 +57,7 @@ export default function Home() {
         )}
       </div>
 
-      <div className="gap-1 px-2 md:px-0 grid grid-rows-2 grid-cols-2 lg:grid-cols-4 lg:grid-rows-1 lg:gap-4 w-full max-w-7xl lg:min-h-72">
+      <div className="gap-1 px-2 md:px-0 grid grid-rows-2 grid-cols-2 lg:grid-cols-4 lg:grid-rows-1 lg:gap-4 w-full lg:min-h-72">
         {['support', 'feature', 'technical', 'bug'].map((category) => (
           <CategoryCard
             key={category}
