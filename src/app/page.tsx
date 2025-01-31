@@ -37,10 +37,10 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen p-4 flex flex-col items-center justify-between">
+    <main className="min-h-screen gap-2 lg:gap-0 p-0 lg:p-4 flex flex-col items-center lg:justify-between">
       <ScoreBoard />
 
-      <div className="grid grid-cols-1 gap-2 max-h-[360px] overflow-hidden items-center mb-4 w-full bg-slate-100 p-4 rounded-lg lg:max-h-none lg:overflow-auto lg:grid-cols-4 lg:grid-rows-4 lg:gap-4 ">
+      <div className="grid grid-cols-1 gap-2 overflow-hidden items-center mb-4 w-full bg-slate-100 p-4 rounded-lg lg:max-h-none lg:overflow-auto lg:grid-cols-4 lg:grid-rows-4 lg:gap-4 ">
         {pendingTickets.length === 0 ? (
           <p className="text-lg font-bold">
             Il n&apos;y a plus de ticket à traiter
